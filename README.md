@@ -35,7 +35,10 @@ class Alien:
         self.isAlive = True
         self.direction = 1
     def draw(self):
-        pygame.draw.rect(screen, (250, 250, 250), (self.xpos, self.ypos, 40, 40))
+        if self.isAlive = True:
+            pygame.draw.rect(screen, (250, 250, 250), (self.xpos, self.ypos, 40, 40))
+        else:
+            self.isAlive
     def move(self, time):
         if time % 800 == 0:
             self.ypos += 100
@@ -46,6 +49,18 @@ class Alien:
             self.xpos+=50*self.direction
         
         return time
+    
+    def collide(self, BulletX, BulletY):
+        if self.isAlive: #only hit live aliens 
+            if BulletX > self.xpos:#check if bullet is right of the left side of the alien 
+                if BulletX < self.xpos + 40:#check if the bullet is loeft of the right side 
+                    if BulletY < self.ypos + 40:#check if the bullet is above the aliens bottom 
+                        if BulletY > self.ypos:#check if the bullet is below the top of the alien 
+                            print("hit!")#for testing
+                            self.isAlive = False#set the alien to dead
+                            return False#set the bu
+        return True
+                
         
 armada = []
 for i in range (4):
@@ -95,7 +110,13 @@ while not gameover:
         bullet.isAlive = True
     
     if bullet.isAlive == True:
-        bullet.move(xpos+28, ypos)
+        bullet.move(xpos+28, ypos) #shoot from player  
+        if bullet.isAlive == True:
+            #check for collions between bullet and ememy
+            for i in range (len(armada)):#check bullet with entire armada's positions
+                bullet.isAlive = armada[i].collide(bullet.xpos, bullet.ypos) #if we hit, set bullet to falkse
+                if bullet.isAlive == False:
+                    break   
     else:
         bullet.xpos = xpos +28
         bullet.ypos = ypos
